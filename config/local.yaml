@@ -1,0 +1,6 @@
+env: "local"
+storagePath: "./storage/storage.db"
+grpc:
+  port: 8082
+  timeout: 5s
+  idleTimeout: 60s
