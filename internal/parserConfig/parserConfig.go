@@ -1,6 +1,7 @@
 package parserConfig
 
 import (
+	"github.com/ilyakaznacheev/cleanenv"
 	"log"
 	"os"
 	"time"
@@ -18,11 +19,17 @@ type GRPCConfig struct {
 }
 
 func MustLoad() *Config {
-	configPath := os.Getenv(key:"CONFIG_PATH")
+	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
 		log.Fatal("CONFIG_PATH environment is not set")
 	}
 	if _, err := os.Stat(configPath); os.IsNotExist(err) {
-		log.Fatal("CONFIG_PATH does not exist")
+		log.Fatalf("CONFIG_PATH does not exist")
 	}
+	var cfg Config
 
+	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
+		log.Fatalf("CONFIG_PATH could not be loaded %v", err)
+	}
+	return &cfg
+}
